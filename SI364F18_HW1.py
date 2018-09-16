@@ -6,12 +6,10 @@
 
 ## List below here, in a comment/comments, the people you worked with on this assignment AND any resources you used to find code (50 point deduction for not doing so). If none, write "None".
 
-
-
 ## [PROBLEM 1] - 150 points
 ## Below is code for one of the simplest possible Flask applications. Edit the code so that once you run this application locally and go to the URL 'http://localhost:5000/class', you see a page that says "Welcome to SI 364!"
 
-from flask import Flask
+from flask import Flask, request
 import requests
 import json
 
@@ -35,21 +33,23 @@ def movie_name(moviename):
     python_obj = json.loads(text)
     return str(python_obj)
 
-
 @app.route('/question')
 def number_form():
     form_string = """ <form action='' method="GET">
     Enter your favorite number:
     <br>
-    <input type=number value=" ">
+    <input type=number name="favorite_number" value="">
     <br>
     <br>
-    <input type="submit" value="Submit"
-
+    <input type="submit" value="Submit">
     </form>
     """
 
-    return form_string
+    if request.method =="GET":
+        number = request.args.get('favorite_number')
+        return form_string + "<br> <br> Double your favorite number is {}".format(2*int(number))
+
+@app.route('/problem4form')
 
 if __name__ == '__main__':
     app.run()
