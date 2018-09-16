@@ -12,6 +12,9 @@
 ## Below is code for one of the simplest possible Flask applications. Edit the code so that once you run this application locally and go to the URL 'http://localhost:5000/class', you see a page that says "Welcome to SI 364!"
 
 from flask import Flask
+import requests
+import json
+
 app = Flask(__name__)
 app.debug = True
 
@@ -19,6 +22,34 @@ app.debug = True
 def hello_to_you():
     return 'Hello!'
 
+@app.route('/class')
+def welcome_to_class():
+    return 'Welcome to SI 364!'
+
+@app.route('/movie/<moviename>')
+def movie_name(moviename):
+    params = {"term": moviename, "media": "movie"}
+    baseurl = "https://itunes.apple.com/search"
+    response = requests.get(baseurl, params = params)
+    text = response.text
+    python_obj = json.loads(text)
+    return str(python_obj)
+
+
+@app.route('/question')
+def number_form():
+    form_string = """ <form action='' method="GET">
+    Enter your favorite number:
+    <br>
+    <input type=number value=" ">
+    <br>
+    <br>
+    <input type="submit" value="Submit"
+
+    </form>
+    """
+
+    return form_string
 
 if __name__ == '__main__':
     app.run()
