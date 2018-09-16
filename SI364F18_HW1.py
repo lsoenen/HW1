@@ -50,6 +50,52 @@ def number_form():
         return form_string + "<br> <br> Double your favorite number is {}".format(2*int(number))
 
 @app.route('/problem4form')
+def people_form():
+    form_string = """ <form action='' method="GET">
+
+    Enter a star wars character (e.g. Darth Vader, Luke Skywalker, C-3PO):
+    <br>
+    <input type=text name="character" value="">
+    <br>
+    <br>
+    What would you like to know about this character? (Select one of the following):
+    <br>
+    <br>
+    <input type="checkbox" name="choice1" value="hair_color"> Hair Color
+    <br>
+    <input type="checkbox" name="choice2" value="birth_year"> Birth Year
+    <br>
+    <input type="checkbox" name="choice3" value="gender"> Gender
+    <br>
+    <br>
+    <input type="submit" value="Submit">
+    </form>
+    """
+
+    if request.method =="GET":
+        person = request.args.get('character')
+        hair_color = request.args.get('choice1')
+        birth_year = request.args.get('choice2')
+        gender = request.args.get('choice3')
+        baseurl = "https://swapi.co/api/people"
+        response = requests.get(baseurl)
+        text = response.text
+        python_obj = json.loads(text)
+        people_data = python_obj['results']
+
+        for people in people_data:
+            if person == people['name']:
+                if hair_color != None:
+                    return  form_string + "{}'s hair color is {}".format(person, people['hair_color'])
+                if birth_year != None:
+                    return form_string + "{}'s birth year is {}".format(person, people['birth_year'])
+                if gender != None:
+                    return form_string + "{}'s gender is {}".format(person, people['gender'])
+                else:
+                    return form_string + "Please check one of the boxes above"
+
+    return form_string
+
 
 if __name__ == '__main__':
     app.run()
