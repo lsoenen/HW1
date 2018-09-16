@@ -35,7 +35,7 @@ def movie_name(moviename):
 
 @app.route('/question')
 def number_form():
-    form_string = """ <form action='' method="GET">
+    form_string = """ <form action='/results' method="GET">
     Enter your favorite number:
     <br>
     <input type=number name="favorite_number" value="">
@@ -44,10 +44,12 @@ def number_form():
     <input type="submit" value="Submit">
     </form>
     """
+    return form_string
 
-    if request.method =="GET":
-        number = request.args.get('favorite_number')
-        return form_string + "<br> <br> Double your favorite number is {}".format(2*int(number))
+@app.route('/results')
+def result_form(methods=["GET"]):
+        number = request.args.get('favorite_number',"")
+        return "Double your favorite number is {}".format(2*int(number))
 
 @app.route('/problem4form')
 def people_form():
